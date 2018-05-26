@@ -33,12 +33,12 @@ app.use(function(req, res, next) {
 })
 
 const filenameRequired = (req, res, next) => {
-  if (!req.query.filename) return res.send({ error: 'Filename required!' })
+  if (!req.body.filename) return res.send({ error: 'Filename required!' })
   else next()
 }
 
 const createIfNotAvailable = (req, res, next) => {
-  const filename = req.query.filename
+  const filename = req.body.filename
 
   File.findOne({ name: filename })
     .then(file => {
@@ -53,7 +53,7 @@ const createIfNotAvailable = (req, res, next) => {
 }
 
 app.post('/api/create', filenameRequired, (req, res) => {
-  const filename = req.query.filename
+  const filename = req.body.filename
 
   File.findOne({ name: filename })
     .then(file => {
@@ -78,8 +78,10 @@ app.post('/api/query', (req, res) => {
 })
 
 app.post('/api/push', filenameRequired, createIfNotAvailable, (req, res) => {
-  const filename = req.query.filename
-  const content = req.query.content || ''
+  console.log(req)
+
+  const filename = req.body.filename
+  const content = req.body.content || ''
 
   File.findOne({ name: filename })
     .then(file => {
@@ -91,7 +93,7 @@ app.post('/api/push', filenameRequired, createIfNotAvailable, (req, res) => {
 })
 
 app.post('/api/pull', filenameRequired, createIfNotAvailable, (req, res) => {
-  const filename = req.query.filename
+  const filename = req.body.filename
 
   File.findOne({ name: filename })
     .then(file => {
