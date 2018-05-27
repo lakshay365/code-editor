@@ -238,7 +238,9 @@ class App extends Component {
   }
 
   onRemove(e) {
+    this.setState({ activeRequests: 1 })
     axios.post(`${SERVER}/api/query`).then(res => {
+      this.setState({ activeRequests: 1 })
       const data = res.data
       Popup.plugins().remove(data)
     })
