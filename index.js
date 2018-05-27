@@ -1,21 +1,39 @@
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-const path = require('path');
+const electron = require('electron')
+const { app, BrowserWindow } = electron
+const path = require('path')
 
-var mainWindow = null;
-const URL = 'file://' + path.join(__dirname,'renderer/index.html')
+let win = null
 
-app.on('ready', function(){
-    mainWindow = new BrowserWindow({
-        minwidth: 612,
-        minheight: 384,
-        icon: path.join(__dirname, 'assets/icons/code.png')
-    });
+const URL = 'file://' + path.join(__dirname, 'renderer/index.html')
 
-    mainWindow.loadURL(URL);
-});
+function createWindow() {
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    icon: path.join(__dirname, 'assets/icons/code.png')
+  })
 
-app.on('browser-window-created', function(e, window){
-    window.setMenu(null);
-});
+  win.loadURL(URL)
+
+  win.on('closed', () => {
+    win = null
+  })
+}
+
+app.on('ready', createWindow)
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('activate', () => {
+  if (win === null) {
+    createWindow()
+  }
+})
+
+app.on('browser-window-created', function(e, window) {
+  window.setMenu(null)
+})

@@ -1,25 +1,25 @@
 {
-  "name": "code.itians",
+  "name": "code-editor",
   "version": "1.0.0",
-  "description": "code editor for the people",
+  "description": "code editor for the ITians",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "electron-packager . CodeItians",
+    "build": "electron-packager . Code Editor",
     "dist": "build"
   },
   "author": "Manish Devgan",
   "license": "ISC",
   "devDependencies": {
+    "electron": "^2.0.2",
     "electron-builder": "^20.15.1",
     "electron-prebuilt": "^1.4.13"
   },
   "build": {
     "appId": "xyz.itians.code",
     "win": {
-        "target": "nsis",
-        "icon": "build/code.png"
+      "target": "nsis",
+      "icon": "assets/icons/code.png"
     }
   }
 }
