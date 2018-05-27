@@ -72,6 +72,7 @@ app.post('/api/create', filenameRequired, (req, res) => {
 app.post('/api/query', (req, res) => {
   File.find({})
     .select('name -_id')
+    .sort('name')
     .exec()
     .then(names => res.send(names))
     .catch(err => console.error(err))
