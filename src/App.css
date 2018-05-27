@@ -16,12 +16,21 @@
 
 .shortcut-list {
   list-style-type: none;
-  margin: 0 -20px;
   padding: 0;
+  margin: 0;
+}
+
+.shortcut-list.main-shortcut {
+  margin: 0 -20px;
+}
+
+.shortcut-list.main-shortcut li {
+  margin-right: 0;
 }
 
 .shortcut-list li {
-  padding: 1rem 0 1rem 3rem;
+  padding: 1rem 0rem 1rem 2.5rem;
+  margin-right: 2rem;
 }
 
 .shortcut-list li:hover {

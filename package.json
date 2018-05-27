@@ -8,6 +8,7 @@
     "brace": "^0.11.1",
     "react": "^16.4.0",
     "react-ace": "^6.1.1",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.4.0",
     "react-hotkeys": "^1.1.4",
     "react-popup": "^0.9.3",

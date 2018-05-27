@@ -5,6 +5,7 @@ import AceEditor from 'react-ace'
 import { HotKeys } from 'react-hotkeys'
 import Popup from 'react-popup'
 import SimpleLoadingBar from 'react-simple-loading-bar'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 import Prompt from './Prompt'
 
@@ -48,21 +49,23 @@ class App extends Component {
       } else {
         content = (
           <div className="file-select">
-            <ul className="shortcut-list">
-              {data.map(obj => (
-                <li
-                  key={obj.name}
-                  onClick={() => {
-                    Popup.close()
-                    this_class.setState({ fileName: obj.name }, () => {
-                      this_class.onPull()
-                    })
-                  }}
-                >
-                  <strong>{obj.name}</strong>
-                </li>
-              ))}
-            </ul>
+            <Scrollbars>
+              <ul className="shortcut-list">
+                {data.map(obj => (
+                  <li
+                    key={obj.name}
+                    onClick={() => {
+                      Popup.close()
+                      this_class.setState({ fileName: obj.name }, () => {
+                        this_class.onPull()
+                      })
+                    }}
+                  >
+                    <strong>{obj.name}</strong>
+                  </li>
+                ))}
+              </ul>
+            </Scrollbars>
           </div>
         )
       }
@@ -125,19 +128,21 @@ class App extends Component {
       } else {
         content = (
           <div className="file-select">
-            <ul className="shortcut-list">
-              {data.map(obj => (
-                <li
-                  key={obj.name}
-                  onClick={() => {
-                    Popup.close()
-                    this_class.removeFile(obj.name)
-                  }}
-                >
-                  <strong>{obj.name}</strong>
-                </li>
-              ))}
-            </ul>
+            <Scrollbars>
+              <ul className="shortcut-list">
+                {data.map(obj => (
+                  <li
+                    key={obj.name}
+                    onClick={() => {
+                      Popup.close()
+                      this_class.removeFile(obj.name)
+                    }}
+                  >
+                    <strong>{obj.name}</strong>
+                  </li>
+                ))}
+              </ul>
+            </Scrollbars>
           </div>
         )
       }
@@ -253,7 +258,7 @@ class App extends Component {
 
     Popup.registerPlugin('shortcuts', function() {
       let content = (
-        <ul className="shortcut-list">
+        <ul className="shortcut-list main-shortcut">
           <li
             onClick={() => {
               Popup.close()
@@ -340,7 +345,10 @@ class App extends Component {
 
     return (
       <HotKeys keyMap={keyMap} handlers={handlers}>
-        <SimpleLoadingBar activeRequests={this.state.activeRequests} />
+        <SimpleLoadingBar
+          activeRequests={this.state.activeRequests}
+          color="#ffdead"
+        />
         <Popup />
         <div className="App">
           <AceEditor
