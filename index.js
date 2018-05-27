@@ -79,8 +79,6 @@ app.post('/api/query', (req, res) => {
 })
 
 app.post('/api/push', filenameRequired, createIfNotAvailable, (req, res) => {
-  console.log(req)
-
   const filename = req.body.filename
   const content = req.body.content || ''
 
@@ -100,6 +98,14 @@ app.post('/api/pull', filenameRequired, createIfNotAvailable, (req, res) => {
     .then(file => {
       res.send({ name: file.name, content: file.content || defaultContent })
     })
+    .catch(err => console.error(err))
+})
+
+app.post('/api/delete', filenameRequired, (req, res) => {
+  const filename = req.body.filename
+
+  File.findOneAndRemove({ name: filename })
+    .then(() => res.send('Done!'))
     .catch(err => console.error(err))
 })
 
