@@ -4,6 +4,7 @@ import brace from 'brace'
 import AceEditor from 'react-ace'
 import { HotKeys } from 'react-hotkeys'
 import Popup from 'react-popup'
+import SimpleLoadingBar from 'react-simple-loading-bar'
 
 import Prompt from './Prompt'
 
@@ -26,7 +27,8 @@ class App extends Component {
       fileName: false,
       fileCanBePushed: false,
       content: defaultContent,
-      status: false
+      status: false,
+      activeRequests: 0
     }
 
     this.onChange = this.onChange.bind(this)
@@ -152,7 +154,7 @@ class App extends Component {
   }
 
   onPush(e) {
-    this.setState({ status: 'Saving ...' })
+    this.setState({ status: 'Saving ...', activeRequests: 1 })
 
     axios
       .post(`${SERVER}/api/push`, {
@@ -166,7 +168,8 @@ class App extends Component {
           fileName: file.name,
           content: file.content,
           status: false,
-          fileCanBePushed: false
+          fileCanBePushed: false,
+          activeRequests: 0
         })
       })
 
@@ -175,7 +178,7 @@ class App extends Component {
 
   onPull(e) {
     if (this.state.fileName) {
-      this.setState({ status: 'Pulling ...' })
+      this.setState({ status: 'Pulling ...', activeRequests: 1 })
 
       axios
         .post(`${SERVER}/api/pull`, {
@@ -188,7 +191,8 @@ class App extends Component {
             fileName: file.name,
             content: file.content,
             status: false,
-            fileCanBePushed: false
+            fileCanBePushed: false,
+            activeRequests: 0
           })
         })
     }
@@ -197,6 +201,8 @@ class App extends Component {
   }
 
   removeFile(name) {
+    this.setState({ activeRequests: 1 })
+
     if (this.state.fileName === name) {
       this.setState({
         fileName: false,
@@ -210,7 +216,7 @@ class App extends Component {
       })
       .then(res => {
         console.log(res)
-        this.setState({ status: false })
+        this.setState({ activeRequests: 0 })
       })
   }
 
@@ -221,7 +227,9 @@ class App extends Component {
   }
 
   onSelectFile(e) {
+    this.setState({ activeRequests: 1 })
     axios.post(`${SERVER}/api/query`).then(res => {
+      this.setState({ activeRequests: 0 })
       const data = res.data
       Popup.plugins().open(data)
     })
@@ -330,6 +338,7 @@ class App extends Component {
 
     return (
       <HotKeys keyMap={keyMap} handlers={handlers}>
+        <SimpleLoadingBar activeRequests={this.state.activeRequests} />
         <Popup />
         <div className="App">
           <AceEditor
