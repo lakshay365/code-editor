@@ -1,14 +1,16 @@
 {
   "name": "code-editor",
+  "productName": "Code Editor",
   "version": "1.0.0",
-  "description": "code editor for the ITians",
+  "description": "Code editor for the ITians",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . Code Editor",
+    "pack": "build --dir",
     "dist": "build"
   },
-  "author": "Manish Devgan",
+  "author": "Manish Devgan <manish.nsit8@gmail.com",
+  "contributors": ["Lakshay Mehra <lakshay344@gmail.com>"],
   "license": "ISC",
   "devDependencies": {
     "electron": "^2.0.2",
@@ -17,9 +19,27 @@
   },
   "build": {
     "appId": "xyz.itians.code",
+    "asar": true,
     "win": {
       "target": "nsis",
-      "icon": "assets/icons/code.png"
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.developer-tools",
+      "icon": "build/icon.icns"
+    },
+    "linux": {
+      "target": "deb",
+      "category": "Development"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "deb": {
+      "synopsis": "Code Editor"
     }
   }
 }
