@@ -9,8 +9,16 @@
     "pack": "build --dir",
     "dist": "build"
   },
-  "author": "Manish Devgan <manish.nsit8@gmail.com",
-  "contributors": ["Lakshay Mehra <lakshay344@gmail.com>"],
+  "author": {
+    "name": "Manish Devgan",
+    "email": "manish.nsit8@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Lakshay Mehra",
+      "email": "lakshay344@gmail.com"
+    }
+  ],
   "license": "ISC",
   "devDependencies": {
     "electron": "^2.0.2",
