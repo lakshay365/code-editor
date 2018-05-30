@@ -8,6 +8,7 @@ import SimpleLoadingBar from 'react-simple-loading-bar'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import Prompt from './Prompt'
+import OpenOption from './OpenOption'
 
 import './App.css'
 
@@ -17,9 +18,6 @@ import 'brace/theme/monokai'
 const SERVER = 'https://code-editor-server.herokuapp.com'
 // const SERVER = 'http://localhost:5000'
 
-const defaultContent =
-  "\n// Please click on 'Options' on the bottom-right corner.\n\n"
-
 class App extends Component {
   constructor(props) {
     super(props)
@@ -27,7 +25,7 @@ class App extends Component {
     this.state = {
       fileName: false,
       fileCanBePushed: false,
-      content: defaultContent,
+      content: '',
       status: false,
       activeRequests: 0
     }
@@ -159,24 +157,26 @@ class App extends Component {
   }
 
   onPush(e) {
-    this.setState({ status: 'Saving ...', activeRequests: 1 })
+    if (this.state.fileName) {
+      this.setState({ status: 'Saving ...', activeRequests: 1 })
 
-    axios
-      .post(`${SERVER}/api/push`, {
-        filename: this.state.fileName,
-        content: this.state.content
-      })
-      .then(res => {
-        const file = res.data
-
-        this.setState({
-          fileName: file.name,
-          content: file.content,
-          status: false,
-          fileCanBePushed: false,
-          activeRequests: 0
+      axios
+        .post(`${SERVER}/api/push`, {
+          filename: this.state.fileName,
+          content: this.state.content
         })
-      })
+        .then(res => {
+          const file = res.data
+
+          this.setState({
+            fileName: file.name,
+            content: file.content,
+            status: false,
+            fileCanBePushed: false,
+            activeRequests: 0
+          })
+        })
+    }
 
     e && e.preventDefault()
   }
@@ -211,7 +211,7 @@ class App extends Component {
     if (this.state.fileName === name) {
       this.setState({
         fileName: false,
-        content: defaultContent
+        content: ''
       })
     }
 
@@ -343,6 +343,24 @@ class App extends Component {
       deleteFile: this.onRemove
     }
 
+    const win = this.state.fileName ? (
+      <AceEditor
+        mode="c_cpp"
+        theme="monokai"
+        name="editor-goes-here"
+        width="100%"
+        height="97vh"
+        fontSize={16}
+        value={this.state.content}
+        onLoad={editor => editor.focus()}
+        onChange={this.onChange}
+        setOptions={{ readOnly: !this.state.fileName }}
+        editorProps={{ $blockScrolling: true }}
+      />
+    ) : (
+      <OpenOption />
+    )
+
     return (
       <HotKeys keyMap={keyMap} handlers={handlers}>
         <SimpleLoadingBar
@@ -351,19 +369,7 @@ class App extends Component {
         />
         <Popup />
         <div className="App">
-          <AceEditor
-            mode="c_cpp"
-            theme="monokai"
-            name="editor-goes-here"
-            width="100%"
-            height="97vh"
-            fontSize={16}
-            value={this.state.content}
-            onLoad={editor => editor.focus()}
-            onChange={this.onChange}
-            setOptions={{ readOnly: !this.state.fileName }}
-            editorProps={{ $blockScrolling: true }}
-          />
+          {win}
           <div className="App-status-bar">
             <strong style={{ color: '#aaa' }}>{this.state.fileName}</strong>
             {this.state.fileName && ' - '}Code Editor. Use 'Ctrl + S' to push
