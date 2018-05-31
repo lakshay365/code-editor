@@ -360,7 +360,8 @@ class App extends Component {
       <HotKeys keyMap={keyMap} handlers={handlers}>
         <SimpleLoadingBar
           activeRequests={this.state.activeRequests}
-          color="#ffdead"
+          color="#06bbff"
+          height="0.15rem"
         />
         <Popup />
         <div className="App">
