@@ -75,13 +75,9 @@ class App extends Component {
     })
 
     Popup.registerPlugin('newFile', function() {
-      let promptValue = 'file'
+      let promptValue = ''
       let promptChange = value => {
         promptValue = value
-
-        if (!promptValue) {
-          console.log('Empty')
-        }
       }
 
       const content = (
@@ -104,9 +100,8 @@ class App extends Component {
               className: 'success',
               key: 'enter',
               action: function() {
-                Popup.close()
-
                 if (promptValue) {
+                  Popup.close()
                   this_class.setState({ fileName: promptValue }, () => {
                     this_class.onPull()
                   })
